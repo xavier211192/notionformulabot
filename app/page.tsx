@@ -1,21 +1,60 @@
 'use client'
 import { useState } from 'react'
 
+interface Result {
+  formula?: string
+  explanation: string
+  breakdown?: string
+}
+
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'generate' | 'explain'>('generate')
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
+  const [result, setResult] = useState<Result | null>(null)
+  const [copied, setCopied] = useState(false)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
     
     setLoading(true)
-    // Simulate API call for now
-    setTimeout(() => {
-      console.log('Submitted:', input)
+    setResult(null)
+
+    try {
+      const endpoint = activeTab === 'generate' ? '/api/generate' : '/api/explain'
+      const body = activeTab === 'generate' ? { input } : { formula: input }
+
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setResult(data)
+      } else {
+        alert(data.error || 'Something went wrong')
+      }
+    } catch (error) {
+      alert('Failed to process request')
+    } finally {
       setLoading(false)
-    }, 2000)
+    }
+  }
+
+  const handleCopy = async () => {
+    if (result?.formula) {
+      try {
+        await navigator.clipboard.writeText(result.formula)
+        setCopied(true)
+        setTimeout(() => setCopied(false), 2000)
+      } catch (err) {
+        console.error('Failed to copy:', err)
+      }
+    }
   }
 
   const placeholder = activeTab === 'generate' 
@@ -69,7 +108,11 @@ export default function Home() {
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
           <div style={{ backgroundColor: '#f3f4f6', padding: '4px', borderRadius: '8px', display: 'inline-flex' }}>
             <button
-              onClick={() => setActiveTab('generate')}
+              onClick={() => {
+                setActiveTab('generate')
+                setResult(null)
+                setInput('')
+              }}
               style={{
                 padding: '8px 16px',
                 borderRadius: '6px',
@@ -85,7 +128,11 @@ export default function Home() {
               ⚡ Generate Formula
             </button>
             <button
-              onClick={() => setActiveTab('explain')}
+              onClick={() => {
+                setActiveTab('explain')
+                setResult(null)
+                setInput('')
+              }}
               style={{
                 padding: '8px 16px',
                 borderRadius: '6px',
@@ -185,6 +232,95 @@ export default function Home() {
               </button>
             </form>
           </div>
+
+          {/* Results Display */}
+          {result && (
+            <div style={{
+              backgroundColor: 'white',
+              border: '1px solid #e5e7eb',
+              borderRadius: '12px',
+              padding: '24px',
+              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+              marginBottom: '24px'
+            }}>
+              {activeTab === 'generate' ? (
+                <>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <h3 style={{ fontSize: '14px', fontWeight: '500', color: '#374151', margin: 0 }}>
+                      Your formula:
+                    </h3>
+                    {result.formula && (
+                      <button
+                        onClick={handleCopy}
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '4px',
+                          fontSize: '14px',
+                          color: '#2563eb',
+                          fontWeight: '500',
+                          border: 'none',
+                          backgroundColor: 'transparent',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {copied ? '✓ Copied!' : '📋 Copy formula'}
+                      </button>
+                    )}
+                  </div>
+                  
+                  {result.formula && (
+                    <div style={{
+                      backgroundColor: '#f9fafb',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      padding: '16px',
+                      marginBottom: '16px'
+                    }}>
+                      <code style={{
+                        fontSize: '14px',
+                        fontFamily: 'Monaco, Consolas, monospace',
+                        color: '#111827',
+                        wordBreak: 'break-all'
+                      }}>
+                        {result.formula}
+                      </code>
+                    </div>
+                  )}
+                  
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                    <span style={{ fontSize: '16px' }}>📖</span>
+                    <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
+                      {result.explanation}
+                    </p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <h3 style={{ fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '16px' }}>
+                    Formula explanation:
+                  </h3>
+                  <div style={{ marginBottom: '12px' }}>
+                    <p style={{ fontSize: '16px', color: '#111827', margin: 0 }}>
+                      {result.explanation}
+                    </p>
+                  </div>
+                  {result.breakdown && (
+                    <div style={{
+                      backgroundColor: '#eff6ff',
+                      border: '1px solid #bfdbfe',
+                      borderRadius: '8px',
+                      padding: '16px'
+                    }}>
+                      <p style={{ fontSize: '14px', color: '#1e40af', margin: 0 }}>
+                        <strong>How it works:</strong> {result.breakdown}
+                      </p>
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          )}
         </div>
       </div>
       
