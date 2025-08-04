@@ -1,11 +1,33 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 interface Result {
   formula?: string
   explanation: string
   breakdown?: string
 }
+
+const generateExamples = [
+  'Calculate days until deadline',
+  'Show High/Medium/Low based on score',
+  'Combine first name and last name',
+  'Count completed tasks',
+  'Check if email field contains @',
+  'Get the year from a date field',
+  'Calculate percentage from two numbers',
+  'Format phone number with dashes'
+]
+
+const explainExamples = [
+  'dateBetween(prop("Due Date"), now(), "days")',
+  'if(prop("Score") > 80, "High", "Low")',
+  'prop("First Name") + " " + prop("Last Name")',
+  'prop("Tasks").filter(current.prop("Status") == "Done").length()',
+  'contains(prop("Email"), "@")',
+  'formatDate(prop("Created"), "YYYY")',
+  'round((prop("Completed") / prop("Total")) * 100, 2)',
+  'replaceAll(prop("Phone"), "[^0-9]", "")'
+]
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<'generate' | 'explain'>('generate')
@@ -14,9 +36,42 @@ export default function Home() {
   const [result, setResult] = useState<Result | null>(null)
   const [copied, setCopied] = useState(false)
 
+  // Usage tracking
+  const [usageCount, setUsageCount] = useState(0)
+  const [usageLimit] = useState(10)
+
+  // Load usage count on component mount
+  useEffect(() => {
+    const currentMonth = new Date().getMonth()
+    const currentYear = new Date().getFullYear()
+    const storageKey = `notion-bot-usage-${currentYear}-${currentMonth}`
+    
+    const stored = localStorage.getItem(storageKey)
+    if (stored) {
+      setUsageCount(parseInt(stored, 10))
+    }
+  }, [])
+
+  // Function to increment usage
+  const incrementUsage = () => {
+    const currentMonth = new Date().getMonth()
+    const currentYear = new Date().getFullYear()
+    const storageKey = `notion-bot-usage-${currentYear}-${currentMonth}`
+    
+    const newCount = usageCount + 1
+    setUsageCount(newCount)
+    localStorage.setItem(storageKey, newCount.toString())
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!input.trim()) return
+    
+    // Check usage limit
+    if (usageCount >= usageLimit) {
+      alert('You\'ve reached your free limit of 10 formulas per month. Upgrade to continue!')
+      return
+    }
     
     setLoading(true)
     setResult(null)
@@ -35,6 +90,7 @@ export default function Home() {
 
       if (response.ok) {
         setResult(data)
+        incrementUsage() // Track successful usage
       } else {
         alert(data.error || 'Something went wrong')
       }
@@ -300,8 +356,19 @@ export default function Home() {
                   <h3 style={{ fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '16px' }}>
                     Formula explanation:
                   </h3>
-                  <div style={{ marginBottom: '12px' }}>
-                    <p style={{ fontSize: '16px', color: '#111827', margin: 0 }}>
+                  <div style={{ 
+                    backgroundColor: '#f9fafb',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    padding: '16px',
+                    marginBottom: '16px'
+                  }}>
+                    <p style={{ 
+                      fontSize: '14px', 
+                      color: '#374151', 
+                      margin: 0,
+                      lineHeight: '1.6'
+                    }}>
                       {result.explanation}
                     </p>
                   </div>
@@ -312,7 +379,12 @@ export default function Home() {
                       borderRadius: '8px',
                       padding: '16px'
                     }}>
-                      <p style={{ fontSize: '14px', color: '#1e40af', margin: 0 }}>
+                      <p style={{ 
+                        fontSize: '14px', 
+                        color: '#1e40af', 
+                        margin: 0,
+                        lineHeight: '1.5'
+                      }}>
                         <strong>How it works:</strong> {result.breakdown}
                       </p>
                     </div>
@@ -321,6 +393,93 @@ export default function Home() {
               )}
             </div>
           )}
+
+          {/* Example Prompts */}
+          <div style={{ marginTop: '32px' }}>
+            <h3 style={{ 
+              fontSize: '14px', 
+              fontWeight: '500', 
+              color: '#374151', 
+              marginBottom: '16px' 
+            }}>
+              {activeTab === 'generate' ? 'Try these examples:' : 'Example formulas to explain:'}
+            </h3>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '8px' }}>
+              {(activeTab === 'generate' ? generateExamples : explainExamples).map((example, index) => (
+                <button
+                  key={index}
+                  onClick={() => setInput(example)}
+                  style={{
+                    textAlign: 'left',
+                    padding: '12px',
+                    fontSize: '14px',
+                    backgroundColor: 'white',
+                    border: '1px solid #e5e7eb',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s',
+                    fontFamily: activeTab === 'explain' ? 'Monaco, Consolas, monospace' : 'inherit'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#f9fafb'
+                    e.currentTarget.style.borderColor = '#d1d5db'
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'white'
+                    e.currentTarget.style.borderColor = '#e5e7eb'
+                  }}
+                >
+                  {example}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Usage Counter */}
+          <div style={{ marginTop: '48px', paddingTop: '24px', borderTop: '1px solid #e5e7eb' }}>
+            <div style={{
+              backgroundColor: '#f9fafb',
+              border: '1px solid #e5e7eb',
+              borderRadius: '8px',
+              padding: '16px'
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                <div>
+                  <p style={{ fontSize: '14px', fontWeight: '500', color: '#374151', margin: 0 }}>
+                    Free usage
+                  </p>
+                  <p style={{ fontSize: '12px', color: '#6b7280', margin: 0 }}>
+                    {usageCount} of {usageLimit} formulas used this month
+                  </p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <div style={{
+                    width: '64px',
+                    backgroundColor: '#e5e7eb',
+                    borderRadius: '9999px',
+                    height: '8px'
+                  }}>
+                    <div style={{
+                      backgroundColor: '#3b82f6',
+                      height: '8px',
+                      borderRadius: '9999px',
+                      width: `${(usageCount / usageLimit) * 100}%`
+                    }}></div>
+                  </div>
+                  <button style={{
+                    fontSize: '12px',
+                    fontWeight: '500',
+                    color: '#2563eb',
+                    border: 'none',
+                    backgroundColor: 'transparent',
+                    cursor: 'pointer'
+                  }}>
+                    Upgrade
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       
