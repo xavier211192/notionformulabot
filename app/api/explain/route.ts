@@ -16,19 +16,27 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const prompt = `You are a Notion formula expert. Explain this Notion formula in simple, plain English.
+    const prompt = `Explain this Notion formula in 1-2 short sentences. Be very concise and focus only on what it does.
 
 Formula: ${formula}
 
-Provide a clear explanation of what this formula does. Keep it beginner-friendly and focus on the practical purpose.
+Rules:
+- Maximum 2 sentences
+- Use simple words
+- Focus on the practical result
+- No technical details
 
-Explain this formula:`
+Example:
+Formula: dateBetween(prop("Start Date"), now(), "days")
+Explanation: Calculates how many days have passed since the start date until today.
+
+Explain:`
 
     const completion = await openai.chat.completions.create({
       model: "gpt-4",
       messages: [{ role: "user", content: prompt }],
-      temperature: 0.2,
-      max_tokens: 200
+      temperature: 0.1,
+      max_tokens: 50
     })
 
     const explanation = completion.choices[0].message.content?.trim() || ''
