@@ -10,22 +10,14 @@ interface Result {
 const generateExamples = [
   'Calculate days until deadline',
   'Show High/Medium/Low based on score',
-  'Combine first name and last name',
   'Count completed tasks',
-  'Check if email field contains @',
-  'Get the year from a date field',
-  'Calculate percentage from two numbers',
   'Format phone number with dashes'
 ]
 
 const explainExamples = [
   'dateBetween(prop("Due Date"), now(), "days")',
   'if(prop("Score") > 80, "High", "Low")',
-  'prop("First Name") + " " + prop("Last Name")',
   'prop("Tasks").filter(current.prop("Status") == "Done").length()',
-  'contains(prop("Email"), "@")',
-  'formatDate(prop("Created"), "YYYY")',
-  'round((prop("Completed") / prop("Total")) * 100, 2)',
   'replaceAll(prop("Phone"), "[^0-9]", "")'
 ]
 
@@ -38,7 +30,7 @@ export default function Home() {
 
   // Usage tracking
   const [usageCount, setUsageCount] = useState(0)
-  const [usageLimit] = useState(10)
+  const [usageLimit] = useState(5)
 
   // Load usage count on component mount
   useEffect(() => {
@@ -69,7 +61,7 @@ export default function Home() {
     
     // Check usage limit
     if (usageCount >= usageLimit) {
-      alert('You\'ve reached your free limit of 10 formulas per month. Upgrade to continue!')
+      alert('You\'ve reached your free limit of 5 formulas per month. Upgrade to continue!')
       return
     }
     
