@@ -155,7 +155,8 @@ export default function Home() {
       </div>
       
       {/* Main content */}
-      <div style={{ maxWidth: '896px', margin: '0 auto', padding: '48px 24px' }}>
+      <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '48px 24px' }}>
+        {/* Hero section */}
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <h2 style={{ fontSize: '30px', fontWeight: '600', color: '#111827', marginBottom: '12px' }}>
             AI-powered Notion formula assistant
@@ -165,7 +166,7 @@ export default function Home() {
           </p>
         </div>
         
-        {/* Tabs */}
+        {/* Tab switcher */}
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px' }}>
           <div style={{ backgroundColor: '#f3f4f6', padding: '4px', borderRadius: '8px', display: 'inline-flex' }}>
             <button
@@ -211,257 +212,219 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Input Form */}
-        <div style={{ maxWidth: '512px', margin: '0 auto' }}>
-          <div style={{ 
-            backgroundColor: '#f9fafb', 
-            border: '1px solid #e5e7eb', 
-            borderRadius: '12px', 
-            padding: '24px',
-            boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-            marginBottom: '24px'
-          }}>
-            <form onSubmit={handleSubmit}>
-              <label style={{ 
-                display: 'block', 
-                fontSize: '14px', 
-                fontWeight: '500', 
-                color: '#374151', 
-                marginBottom: '12px' 
-              }}>
-                {activeTab === 'generate' 
-                  ? 'What would you like to calculate?' 
-                  : 'Paste your formula here:'}
-              </label>
-              
-              <textarea
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={placeholder}
-                disabled={loading}
-                style={{
-                  width: '100%',
-                  padding: '16px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  resize: 'none',
-                  height: '96px',
-                  fontSize: '16px',
-                  backgroundColor: 'white',
-                  boxSizing: 'border-box',
-                  fontFamily: 'inherit'
-                }}
-              />
-
-              <button
-                type="submit"
-                disabled={loading || !input.trim()}
-                style={{
-                  marginTop: '16px',
-                  width: '100%',
-                  backgroundColor: loading || !input.trim() ? '#9ca3af' : '#111827',
-                  color: 'white',
-                  padding: '12px 16px',
-                  borderRadius: '8px',
-                  fontWeight: '500',
-                  border: 'none',
-                  cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
-                  fontSize: '14px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  gap: '8px'
-                }}
-              >
-                {loading ? (
-                  <>
-                    <div style={{
-                      width: '16px',
-                      height: '16px',
-                      border: '2px solid white',
-                      borderTop: '2px solid transparent',
-                      borderRadius: '50%',
-                      animation: 'spin 1s linear infinite'
-                    }}></div>
-                    {loadingText}
-                  </>
-                ) : (
-                  <>
-                    ➤ {buttonText}
-                  </>
-                )}
-              </button>
-            </form>
-          </div>
-
-          {/* Results Display */}
-          {result && (
-            <div style={{
-              backgroundColor: 'white',
-              border: '1px solid #e5e7eb',
-              borderRadius: '12px',
+        {/* Two-column layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+          {/* Left Column - Main Interface */}
+          <div className="lg:col-span-2">
+            {/* Input Form */}
+            <div style={{ 
+              backgroundColor: '#f9fafb', 
+              border: '1px solid #e5e7eb', 
+              borderRadius: '12px', 
               padding: '24px',
               boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
               marginBottom: '24px'
             }}>
-              {activeTab === 'generate' ? (
-                <>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-                    <h3 style={{ fontSize: '14px', fontWeight: '500', color: '#374151', margin: 0 }}>
-                      Your formula:
-                    </h3>
+              <form onSubmit={handleSubmit}>
+                <label style={{ 
+                  display: 'block', 
+                  fontSize: '14px', 
+                  fontWeight: '500', 
+                  color: '#374151', 
+                  marginBottom: '12px' 
+                }}>
+                  {activeTab === 'generate' 
+                    ? 'What would you like to calculate?' 
+                    : 'Paste your formula here:'}
+                </label>
+                
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={placeholder}
+                  disabled={loading}
+                  style={{
+                    width: '100%',
+                    padding: '16px',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '8px',
+                    resize: 'none',
+                    height: '96px',
+                    fontSize: '16px',
+                    backgroundColor: 'white',
+                    boxSizing: 'border-box',
+                    fontFamily: 'inherit'
+                  }}
+                />
+
+                <button
+                  type="submit"
+                  disabled={loading || !input.trim()}
+                  style={{
+                    marginTop: '16px',
+                    width: '100%',
+                    backgroundColor: loading || !input.trim() ? '#9ca3af' : '#111827',
+                    color: 'white',
+                    padding: '12px 16px',
+                    borderRadius: '8px',
+                    fontWeight: '500',
+                    border: 'none',
+                    cursor: loading || !input.trim() ? 'not-allowed' : 'pointer',
+                    fontSize: '14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '8px'
+                  }}
+                >
+                  {loading ? (
+                    <>
+                      <div style={{
+                        width: '16px',
+                        height: '16px',
+                        border: '2px solid white',
+                        borderTop: '2px solid transparent',
+                        borderRadius: '50%',
+                        animation: 'spin 1s linear infinite'
+                      }}></div>
+                      {loadingText}
+                    </>
+                  ) : (
+                    <>
+                      ➤ {buttonText}
+                    </>
+                  )}
+                </button>
+              </form>
+            </div>
+
+            {/* Results Display */}
+            {result && (
+              <div style={{
+                backgroundColor: 'white',
+                border: '1px solid #e5e7eb',
+                borderRadius: '12px',
+                padding: '24px',
+                boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+                marginBottom: '24px'
+              }}>
+                {activeTab === 'generate' ? (
+                  <>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                      <h3 style={{ fontSize: '14px', fontWeight: '500', color: '#374151', margin: 0 }}>
+                        Your formula:
+                      </h3>
+                      {result.formula && (
+                        <button
+                          onClick={handleCopy}
+                          style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '4px',
+                            fontSize: '14px',
+                            color: '#2563eb',
+                            fontWeight: '500',
+                            border: 'none',
+                            backgroundColor: 'transparent',
+                            cursor: 'pointer'
+                          }}
+                        >
+                          {copied ? '✓ Copied!' : '📋 Copy formula'}
+                        </button>
+                      )}
+                    </div>
+                    
                     {result.formula && (
-                      <button
-                        onClick={handleCopy}
-                        style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '4px',
+                      <div style={{
+                        backgroundColor: '#f9fafb',
+                        border: '1px solid #e5e7eb',
+                        borderRadius: '8px',
+                        padding: '16px',
+                        marginBottom: '16px'
+                      }}>
+                        <code style={{
                           fontSize: '14px',
-                          color: '#2563eb',
-                          fontWeight: '500',
-                          border: 'none',
-                          backgroundColor: 'transparent',
-                          cursor: 'pointer'
-                        }}
-                      >
-                        {copied ? '✓ Copied!' : '📋 Copy formula'}
-                      </button>
+                          fontFamily: 'Monaco, Consolas, monospace',
+                          color: '#111827',
+                          wordBreak: 'break-all'
+                        }}>
+                          {result.formula}
+                        </code>
+                      </div>
                     )}
-                  </div>
-                  
-                  {result.formula && (
-                    <div style={{
+                    
+                    <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                      <span style={{ fontSize: '16px' }}>📖</span>
+                      <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
+                        {result.explanation}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <h3 style={{ fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '16px' }}>
+                      Formula explanation:
+                    </h3>
+                    <div style={{ 
                       backgroundColor: '#f9fafb',
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
                       padding: '16px',
                       marginBottom: '16px'
                     }}>
-                      <code style={{
-                        fontSize: '14px',
-                        fontFamily: 'Monaco, Consolas, monospace',
-                        color: '#111827',
-                        wordBreak: 'break-all'
-                      }}>
-                        {result.formula}
-                      </code>
-                    </div>
-                  )}
-                  
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
-                    <span style={{ fontSize: '16px' }}>📖</span>
-                    <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
-                      {result.explanation}
-                    </p>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <h3 style={{ fontSize: '14px', fontWeight: '500', color: '#374151', marginBottom: '16px' }}>
-                    Formula explanation:
-                  </h3>
-                  <div style={{ 
-                    backgroundColor: '#f9fafb',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    padding: '16px',
-                    marginBottom: '16px'
-                  }}>
-                    <p style={{ 
-                      fontSize: '14px', 
-                      color: '#374151', 
-                      margin: 0,
-                      lineHeight: '1.6'
-                    }}>
-                      {result.explanation}
-                    </p>
-                  </div>
-                  {result.breakdown && (
-                    <div style={{
-                      backgroundColor: '#eff6ff',
-                      border: '1px solid #bfdbfe',
-                      borderRadius: '8px',
-                      padding: '16px'
-                    }}>
                       <p style={{ 
                         fontSize: '14px', 
-                        color: '#1e40af', 
+                        color: '#374151', 
                         margin: 0,
-                        lineHeight: '1.5'
+                        lineHeight: '1.6'
                       }}>
-                        <strong>How it works:</strong> {result.breakdown}
+                        {result.explanation}
                       </p>
                     </div>
-                  )}
-                </>
-              )}
-            </div>
-          )}
+                    {result.breakdown && (
+                      <div style={{
+                        backgroundColor: '#eff6ff',
+                        border: '1px solid #bfdbfe',
+                        borderRadius: '8px',
+                        padding: '16px'
+                      }}>
+                        <p style={{ 
+                          fontSize: '14px', 
+                          color: '#1e40af', 
+                          margin: 0,
+                          lineHeight: '1.5'
+                        }}>
+                          <strong>How it works:</strong> {result.breakdown}
+                        </p>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            )}
 
-          {/* Example Prompts */}
-          <div style={{ marginTop: '32px' }}>
-            <h3 style={{ 
-              fontSize: '14px', 
-              fontWeight: '500', 
-              color: '#374151', 
-              marginBottom: '16px' 
-            }}>
-              {activeTab === 'generate' ? 'Try these examples:' : 'Example formulas to explain:'}
-            </h3>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '8px' }}>
-              {(activeTab === 'generate' ? generateExamples : explainExamples).map((example, index) => (
-                <button
-                  key={index}
-                  onClick={() => setInput(example)}
-                  style={{
-                    textAlign: 'left',
-                    padding: '12px',
-                    fontSize: '14px',
-                    backgroundColor: 'white',
-                    border: '1px solid #e5e7eb',
-                    borderRadius: '8px',
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    fontFamily: activeTab === 'explain' ? 'Monaco, Consolas, monospace' : 'inherit'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#f9fafb'
-                    e.currentTarget.style.borderColor = '#d1d5db'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = 'white'
-                    e.currentTarget.style.borderColor = '#e5e7eb'
-                  }}
-                >
-                  {example}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Usage Counter */}
-          {dailyUsage >= 3 && (
-            <div style={{ marginTop: '48px', paddingTop: '24px', borderTop: '1px solid #e5e7eb' }}>
+            {/* Progress bar/usage counter - right under results */}
+            {result && dailyUsage >= 3 && (
               <div style={{
-                backgroundColor: dailyUsage >= dailyLimit ? '#fef2f2' : '#f9fafb',
-                border: `1px solid ${dailyUsage >= dailyLimit ? '#fecaca' : '#e5e7eb'}`,
-                borderRadius: '8px',
-                padding: '16px'
+                backgroundColor: dailyUsage >= dailyLimit ? '#fef2f2' : '#eff6ff',
+                border: `1px solid ${dailyUsage >= dailyLimit ? '#fecaca' : '#bfdbfe'}`,
+                borderRadius: '12px',
+                padding: '16px',
+                marginBottom: '24px'
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                   <div>
                     <p style={{ 
                       fontSize: '14px', 
                       fontWeight: '500', 
-                      color: dailyUsage >= dailyLimit ? '#dc2626' : '#374151', 
+                      color: dailyUsage >= dailyLimit ? '#dc2626' : '#1e40af', 
                       margin: 0 
                     }}>
                       {dailyUsage >= dailyLimit ? 'Daily limit reached' : 'Getting close to daily limit'}
                     </p>
                     <p style={{ 
                       fontSize: '12px', 
-                      color: dailyUsage >= dailyLimit ? '#dc2626' : '#6b7280', 
+                      color: dailyUsage >= dailyLimit ? '#dc2626' : '#1e40af', 
                       margin: 0 
                     }}>
                       {dailyUsage} of {dailyLimit} formulas used today • Resets tomorrow
@@ -497,8 +460,92 @@ export default function Home() {
                   </div>
                 </div>
               </div>
+            )}
+          </div>
+
+          {/* Right Column - Examples Sidebar */}
+          <div className="lg:sticky lg:top-12 lg:h-fit">
+            <div style={{ 
+              backgroundColor: '#f9fafb',
+              border: '1px solid #e5e7eb',
+              borderRadius: '12px',
+              padding: '24px',
+              boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)'
+            }}>
+              <h3 style={{ 
+                fontSize: '16px', 
+                fontWeight: '600', 
+                color: '#111827', 
+                marginBottom: '16px',
+                margin: 0
+              }}>
+                {activeTab === 'generate' ? 'Try these examples:' : 'Example formulas to explain:'}
+              </h3>
+              
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '24px' }}>
+                {(activeTab === 'generate' ? generateExamples : explainExamples).map((example, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setInput(example)}
+                    style={{
+                      width: '100%',
+                      textAlign: 'left',
+                      padding: '12px',
+                      fontSize: '14px',
+                      backgroundColor: 'white',
+                      border: '1px solid #e5e7eb',
+                      borderRadius: '8px',
+                      cursor: 'pointer',
+                      transition: 'all 0.2s',
+                      fontFamily: activeTab === 'explain' ? 'Monaco, Consolas, monospace' : 'inherit'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#f3f4f6'
+                      e.currentTarget.style.borderColor = '#d1d5db'
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'white'
+                      e.currentTarget.style.borderColor = '#e5e7eb'
+                    }}
+                  >
+                    {example}
+                  </button>
+                ))}
+              </div>
+              
+              {/* Pro tip card */}
+              <div style={{
+                backgroundColor: '#eff6ff',
+                border: '1px solid #bfdbfe',
+                borderRadius: '8px',
+                padding: '16px'
+              }}>
+                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '8px' }}>
+                  <span style={{ fontSize: '16px' }}>💡</span>
+                  <div>
+                    <h4 style={{ 
+                      fontSize: '14px', 
+                      fontWeight: '600', 
+                      color: '#1e40af', 
+                      margin: '0 0 4px 0' 
+                    }}>
+                      Pro tip
+                    </h4>
+                    <p style={{ 
+                      fontSize: '12px', 
+                      color: '#1e40af', 
+                      margin: 0,
+                      lineHeight: '1.4'
+                    }}>
+                      {activeTab === 'generate' 
+                        ? 'Be specific about your requirements. Include property names and desired output formats.'
+                        : 'Paste formulas exactly as they appear in Notion for the most accurate explanations.'}
+                    </p>
+                  </div>
+                </div>
+              </div>
             </div>
-          )}
+          </div>
         </div>
       </div>
       

@@ -9,18 +9,23 @@ export default function LandingPage() {
     e.preventDefault()
     if (!email.trim()) return
     
-    const waitlistEmails = JSON.parse(localStorage.getItem('waitlist-emails') || '[]')
-    if (!waitlistEmails.includes(email)) {
-      waitlistEmails.push(email)
-      localStorage.setItem('waitlist-emails', JSON.stringify(waitlistEmails))
+    if (typeof window !== 'undefined') {
+      const waitlistEmails = JSON.parse(localStorage.getItem('waitlist-emails') || '[]')
+      if (!waitlistEmails.includes(email)) {
+        waitlistEmails.push(email)
+        localStorage.setItem('waitlist-emails', JSON.stringify(waitlistEmails))
+      }
     }
     
     setJoined(true)
   }
 
   const getWaitlistCount = () => {
-    const emails = JSON.parse(localStorage.getItem('waitlist-emails') || '[]')
-    return emails.length
+    if (typeof window !== 'undefined') {
+      const emails = JSON.parse(localStorage.getItem('waitlist-emails') || '[]')
+      return emails.length
+    }
+    return 0
   }
 
   if (joined) {
