@@ -2,8 +2,8 @@ import './globals.css'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Notion Formula Bot',
-  description: 'AI-powered Notion formula generator and explainer',
+  title: 'Notion Assist',
+  description: 'AI-powered assistant for Notion workflows',
 }
 
 export default function RootLayout({
