@@ -31,7 +31,6 @@ export default function Home() {
   // Daily usage tracking
   const [dailyUsage, setDailyUsage] = useState(0)
   const [dailyLimit] = useState(5)
-  const [showWaitlist, setShowWaitlist] = useState(false)
 
   // Get today's storage key
   const getDailyKey = () => {
@@ -56,15 +55,10 @@ export default function Home() {
     const newCount = dailyUsage + 1
     setDailyUsage(newCount)
     localStorage.setItem(todayKey, newCount.toString())
-    
-    // Strategic waitlist prompts
-    if (newCount === 3) {
-      // After 3rd use today - soft ask
-      setTimeout(() => setShowWaitlist(true), 2000)
-    } else if (newCount === 5) {
-      // Hit daily limit - stronger ask
-      setTimeout(() => setShowWaitlist(true), 1000)
-    }
+  }
+
+  const handleWaitlistSignup = () => {
+    window.open('https://forms.gle/LGEv5ASTdzDVS3k59', '_blank')
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -74,7 +68,7 @@ export default function Home() {
     // Check daily limit
     if (dailyUsage >= dailyLimit) {
       alert('You\'ve reached your daily limit of 5 formulas. Try again tomorrow or join the waitlist for unlimited access!')
-      setShowWaitlist(true)
+      handleWaitlistSignup()
       return
     }
     
@@ -144,10 +138,10 @@ export default function Home() {
             </div>
             <div>
               <h1 style={{ fontSize: '20px', fontWeight: '600', color: '#111827', margin: 0 }}>
-                Notion Formula Bot
+                Notion Assist
               </h1>
               <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
-                AI-powered formula assistant
+                AI-powered Notion assistant
               </p>
             </div>
           </div>
@@ -159,10 +153,10 @@ export default function Home() {
         {/* Hero section */}
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <h2 style={{ fontSize: '30px', fontWeight: '600', color: '#111827', marginBottom: '12px' }}>
-            AI-powered Notion formula assistant
+            AI-powered Notion assistant
           </h2>
           <p style={{ fontSize: '18px', color: '#4b5563', maxWidth: '512px', margin: '0 auto' }}>
-            Generate formulas from plain English or get instant explanations of existing formulas.
+            Generate Notion formulas from plain English or get instant explanations of existing formulas.
           </p>
         </div>
         
@@ -445,7 +439,7 @@ export default function Home() {
                       }}></div>
                     </div>
                     <button 
-                      onClick={() => setShowWaitlist(true)}
+                      onClick={handleWaitlistSignup}
                       style={{
                         fontSize: '12px',
                         fontWeight: '500',
@@ -455,7 +449,7 @@ export default function Home() {
                         cursor: 'pointer'
                       }}
                     >
-                      {dailyUsage >= dailyLimit ? 'Get Unlimited' : 'Upgrade'}
+                      Join Waitlist
                     </button>
                   </div>
                 </div>

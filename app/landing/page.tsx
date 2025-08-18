@@ -1,62 +1,6 @@
 'use client'
-import { useState } from 'react'
 
 export default function LandingPage() {
-  const [email, setEmail] = useState('')
-  const [joined, setJoined] = useState(false)
-
-  const handleWaitlistSignup = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!email.trim()) return
-    
-    if (typeof window !== 'undefined') {
-      const waitlistEmails = JSON.parse(localStorage.getItem('waitlist-emails') || '[]')
-      if (!waitlistEmails.includes(email)) {
-        waitlistEmails.push(email)
-        localStorage.setItem('waitlist-emails', JSON.stringify(waitlistEmails))
-      }
-    }
-    
-    setJoined(true)
-  }
-
-  const getWaitlistCount = () => {
-    if (typeof window !== 'undefined') {
-      const emails = JSON.parse(localStorage.getItem('waitlist-emails') || '[]')
-      return emails.length
-    }
-    return 0
-  }
-
-  if (joined) {
-    return (
-      <div style={{ minHeight: '100vh', backgroundColor: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          <div style={{ fontSize: '64px', marginBottom: '24px' }}>🎉</div>
-          <h1 style={{ fontSize: '32px', fontWeight: '600', color: '#111827', marginBottom: '16px' }}>
-            Welcome to the waitlist!
-          </h1>
-          <p style={{ fontSize: '18px', color: '#6b7280', marginBottom: '32px', maxWidth: '400px' }}>
-            We'll email you as soon as the full version is ready with unlimited formulas and smart integrations.
-          </p>
-          <a 
-            href="/app"
-            style={{
-              display: 'inline-block',
-              backgroundColor: '#111827',
-              color: 'white',
-              padding: '12px 24px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              fontWeight: '500'
-            }}
-          >
-            Try the Free Version
-          </a>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div style={{ minHeight: '100vh', backgroundColor: 'white' }}>
@@ -77,7 +21,7 @@ export default function LandingPage() {
                 <span style={{ color: 'white', fontSize: '18px' }}>🤖</span>
               </div>
               <span style={{ fontSize: '18px', fontWeight: '600', color: '#111827' }}>
-                Notion Formula Bot
+                Notion Assist
               </span>
             </div>
             <a 
@@ -108,7 +52,7 @@ export default function LandingPage() {
             marginBottom: '24px',
             lineHeight: '1.1'
           }}>
-            AI Formula Generator<br />for Notion
+            AI Assistant<br />for Notion
           </h1>
           <p style={{ 
             fontSize: '20px', 
@@ -227,46 +171,26 @@ export default function LandingPage() {
             </div>
           </div>
 
-          {/* Email Signup */}
-          <form onSubmit={handleWaitlistSignup} style={{ maxWidth: '400px', margin: '0 auto' }}>
-            <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Enter your email"
-                required
-                style={{
-                  flex: 1,
-                  padding: '12px 16px',
-                  border: '1px solid #d1d5db',
-                  borderRadius: '8px',
-                  fontSize: '16px',
-                  boxSizing: 'border-box'
-                }}
-              />
-              <button
-                type="submit"
-                style={{
-                  backgroundColor: '#111827',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '8px',
-                  padding: '12px 24px',
-                  fontSize: '16px',
-                  fontWeight: '600',
-                  cursor: 'pointer',
-                  whiteSpace: 'nowrap'
-                }}
-              >
-                Join
-              </button>
-            </div>
-            <p style={{ fontSize: '14px', color: '#9ca3af', margin: 0 }}>
-              {getWaitlistCount() > 0 && `${getWaitlistCount()} people already joined • `}
+          {/* Join Waitlist Link */}
+          <div style={{ textAlign: 'center' }}>
+            <a 
+              href="https://forms.gle/LGEv5ASTdzDVS3k59"
+              target="_blank"
+              style={{
+                backgroundColor: '#111827',
+                color: 'white',
+                padding: '12px 24px',
+                borderRadius: '8px',
+                textDecoration: 'none',
+                fontWeight: '600'
+              }}
+            >
+              Join Waitlist
+            </a>
+            <p style={{ fontSize: '14px', color: '#9ca3af', margin: '16px 0 0 0' }}>
               No spam, unsubscribe anytime
             </p>
-          </form>
+          </div>
         </div>
       </div>
     </div>
