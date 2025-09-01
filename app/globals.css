@@ -7,3 +7,10 @@
     font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   }
 }
+
+@layer components {
+  .hero-cta-button:hover {
+    background-color: #111827 !important;
+    color: white !important;
+  }
+}

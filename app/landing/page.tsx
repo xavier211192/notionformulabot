@@ -65,6 +65,7 @@ export default function LandingPage() {
           </p>
           <a 
             href="/app"
+            className="hero-cta-button"
             style={{
               display: 'inline-block',
               backgroundColor: 'white',
@@ -76,14 +77,6 @@ export default function LandingPage() {
               fontWeight: '600',
               textDecoration: 'none',
               transition: 'all 0.2s'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#111827'
-              e.currentTarget.style.color = 'white'
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'white'
-              e.currentTarget.style.color = '#111827'
             }}
           >
             Try it Free
