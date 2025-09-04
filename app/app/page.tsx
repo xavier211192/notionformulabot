@@ -30,7 +30,7 @@ export default function Home() {
 
   // Daily usage tracking
   const [dailyUsage, setDailyUsage] = useState(0)
-  const [dailyLimit] = useState(5)
+  const [dailyLimit] = useState(25)
 
   // Get today's storage key
   const getDailyKey = () => {
@@ -67,7 +67,7 @@ export default function Home() {
     
     // Check daily limit
     if (dailyUsage >= dailyLimit) {
-      alert('You\'ve reached your daily limit of 5 formulas. Try again tomorrow or join the waitlist for unlimited access!')
+      alert('You\'ve reached your daily limit of 25 formulas. Try again tomorrow or join the waitlist for unlimited access!')
       handleWaitlistSignup()
       return
     }
@@ -124,7 +124,7 @@ export default function Home() {
       {/* Header */}
       <div style={{ borderBottom: '1px solid #e5e7eb' }}>
         <div style={{ maxWidth: '896px', margin: '0 auto', padding: '16px 24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', cursor: 'pointer' }}>
             <div style={{ 
               width: '32px', 
               height: '32px', 
@@ -141,10 +141,10 @@ export default function Home() {
                 Notion Assist
               </h1>
               <p style={{ fontSize: '14px', color: '#6b7280', margin: 0 }}>
-                AI-powered Notion assistant
+                AI-powered Notion assistant • <span style={{ color: '#059669', fontWeight: '600' }}>25 free formulas daily</span>
               </p>
             </div>
-          </div>
+          </a>
         </div>
       </div>
       
@@ -155,9 +155,35 @@ export default function Home() {
           <h2 style={{ fontSize: '30px', fontWeight: '600', color: '#111827', marginBottom: '12px' }}>
             AI-powered Notion assistant
           </h2>
-          <p style={{ fontSize: '18px', color: '#4b5563', maxWidth: '512px', margin: '0 auto' }}>
+          <p style={{ fontSize: '18px', color: '#4b5563', maxWidth: '512px', margin: '0 auto 24px auto' }}>
             Generate Notion formulas from plain English or get instant explanations of existing formulas.
           </p>
+          <a 
+            href="https://forms.gle/LGEv5ASTdzDVS3k59"
+            target="_blank"
+            style={{
+              display: 'inline-block',
+              backgroundColor: '#f3f4f6',
+              color: '#374151',
+              border: '1px solid #d1d5db',
+              padding: '8px 16px',
+              borderRadius: '6px',
+              textDecoration: 'none',
+              fontSize: '14px',
+              fontWeight: '500',
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = '#e5e7eb'
+              e.currentTarget.style.borderColor = '#9ca3af'
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = '#f3f4f6'
+              e.currentTarget.style.borderColor = '#d1d5db'
+            }}
+          >
+            Join Beta Program
+          </a>
         </div>
         
         {/* Tab switcher */}
@@ -398,7 +424,7 @@ export default function Home() {
             )}
 
             {/* Progress bar/usage counter - right under results */}
-            {result && dailyUsage >= 3 && (
+            {result && dailyUsage >= 15 && (
               <div style={{
                 backgroundColor: dailyUsage >= dailyLimit ? '#fef2f2' : '#eff6ff',
                 border: `1px solid ${dailyUsage >= dailyLimit ? '#fecaca' : '#bfdbfe'}`,
@@ -485,13 +511,16 @@ export default function Home() {
                       width: '100%',
                       textAlign: 'left',
                       padding: '12px',
-                      fontSize: '14px',
+                      fontSize: activeTab === 'explain' ? '12px' : '14px',
                       backgroundColor: 'white',
                       border: '1px solid #e5e7eb',
                       borderRadius: '8px',
                       cursor: 'pointer',
                       transition: 'all 0.2s',
-                      fontFamily: activeTab === 'explain' ? 'Monaco, Consolas, monospace' : 'inherit'
+                      fontFamily: activeTab === 'explain' ? 'Monaco, Consolas, monospace' : 'inherit',
+                      wordBreak: 'break-word',
+                      lineHeight: '1.4',
+                      whiteSpace: 'normal'
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.backgroundColor = '#f3f4f6'
